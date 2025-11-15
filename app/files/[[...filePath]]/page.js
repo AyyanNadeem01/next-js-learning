@@ -1,5 +1,5 @@
-export default function Page({ params }) {
-  const { filePath } = params;
+export default async function Page({ params }) {
+  const { filePath } = await params;
 
   return (
     <div>
