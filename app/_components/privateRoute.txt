@@ -1,0 +1,1 @@
+by addding _ in starting of folder it becomes private route and is inaccessible
