@@ -8,5 +8,6 @@ export default function Home() {
   <ComponentPage/>
   <Link href="/about">About</Link><br/>{/*do csr*/}
   <Link href="/services">Services</Link>
+  <Link href="/blogs">blogs</Link>
   </>);
 }

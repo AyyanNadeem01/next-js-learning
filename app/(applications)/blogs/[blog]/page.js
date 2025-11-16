@@ -1,21 +1,38 @@
-import { notFound } from 'next/navigation'
-import React from 'react'
+import { notFound } from 'next/navigation';
+import React from 'react';
+export function generateStaticParams() {//these will be generated at build time
+  return [
+    {
+      blog: "1",
+    },
+    {
+      blog: "2",
+        },    
+        {
+      blog: "3",
+    }, {
+      blog: "4",
+        },    
+        {
+      blog: "5",
+    }
+  ];
+}
+const page = async({ params }) => {
+  const { blog } = await params; // no need for 'await' here, params is synchronous
 
-const page = async ({params}) => {
-  console.log(await params)
-  const {blog} = await params
-  console.log(blog)
-  const checkIsNumber=()=>{
-    return isNaN(blog)
+  // Check if blog is a number
+  const checkIsNumber = () => !isNaN(blog);
+
+  if (!checkIsNumber()) {
+    notFound(); 
   }
-  if (checkIsNumber(blog)){
-    notFound();
-  }
+
   return (
     <div>
-     blog dynamic data getting from url last part: {blog}
+      Blog dynamic data getting from URL last part: {blog}
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

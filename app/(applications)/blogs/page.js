@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import Link from 'next/link';
+
 export const metadata = {
   title: "Blogs",
 };
@@ -6,9 +8,12 @@ export const metadata = {
 const page = () => {
   return (
     <div>
-      blog
+      <h1>Blogs</h1>
+      <Link href="/blogs/1">Blog 1</Link><br />
+      <Link href="/blogs/2">Blog 2</Link><br />
+      <Link href="/blogs/3">Blog 3</Link><br />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
