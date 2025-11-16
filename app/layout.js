@@ -12,9 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       {/* <title>Home</title>not recommended way */}
       <body >
-       <header style={{background:"red",color:"#fff",textAlign:"center"}}>Header</header>
        {children}
-       <footer style={{background:"green",color:"#fff",textAlign:"center"}}>Footer</footer>
       </body>
     </html>
   );

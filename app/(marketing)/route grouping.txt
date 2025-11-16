@@ -1,0 +1,1 @@
+route grouping used here so that even if we dont write route like /marketing/about, we can access directly by /about, it is dony by(marketing) like this
