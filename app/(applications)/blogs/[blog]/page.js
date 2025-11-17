@@ -27,6 +27,7 @@ export async function generateStaticParams() {//these will be generated at build
   //for every id which is not pre generated the first request will take time as it will be generated at runtime
   //and one generated , then next time it will be served from cache and use already generated code from server
   console.log(data)
+//one more thing to note if the page has some dynamic data to display then the variable revalidate will work otherwise it will not work
   return data.map((id)=>({blog:`${id}`}))
   // return [
   //   {    blog: "1",
