@@ -1,0 +1,115 @@
+Parallel API Calling Concept
+
+Definition:
+Parallel API calling is the practice of sending multiple API requests at the same time rather than sequentially, allowing applications to fetch data faster and utilize resources efficiently.
+
+Why Use Parallel Calls:
+
+Performance: Reduces total waiting time because all requests run simultaneously.
+
+Efficiency: Utilizes network and CPU resources better than sequential requests.
+
+User Experience: Data can load faster, improving responsiveness of apps.
+
+How It Works:
+
+Identify all the APIs whose data is needed.
+
+Trigger all requests concurrently using constructs like Promise.all() (JavaScript) or equivalent in other languages.
+
+Wait for all requests to complete before processing the results.
+
+Handle errors carefully — failure in one request can affect the combined result.
+
+Example Scenario:
+
+Fetching a list of todos from one API.
+
+Fetching multiple slow APIs simultaneously.
+
+Combine results after all requests complete.
+
+Key Points:
+
+Each request is independent; no shared state is required.
+
+Can be done on server-side (faster, secure) or client-side (after page load).
+
+Must manage errors and timeouts to avoid blocking the entire process.
+
+Benefits:
+
+Faster overall loading time.
+
+Better scalability for multiple API endpoints.
+
+Improved user experience in web and mobile apps.
+
+Caution:
+
+Overloading the server with too many simultaneous requests can cause throttling or failures.
+
+Always consider rate limits and concurrency restrictions.
+Parallel API Calling vs Component-Based Data Fetching
+
+Parallel API Calling:
+
+Definition: Sending multiple API requests at the same time instead of one after another.
+
+Purpose: Improves performance by reducing total wait time.
+
+How it works: Use constructs like Promise.all() to fetch all data concurrently and wait for all results before rendering.
+
+Use case: Fetching multiple independent APIs (e.g., todos, slow APIs) in one place.
+
+Benefit: Faster data loading and more efficient resource use.
+
+Caution: A single failing request can affect the combined result; handle errors properly.
+
+Component-Based Data Fetching (Parent/Child):
+
+Definition: Each component (parent or child) can fetch its own data independently.
+
+Purpose: Promotes modularity and reusability of UI components.
+
+How it works: Parent may fetch general data; children fetch their own data as needed.
+
+Use case: Large applications where components are reused across pages.
+
+Benefit: Better separation of concerns; children load their data independently, which can reduce complexity in the parent.
+
+Caution: Sequential fetching in multiple children may slow down the page if not handled in parallel.
+
+Key Difference:
+
+Parallel API calling focuses on speed and efficiency of fetching multiple data sources together, usually in one place.
+
+Component-based fetching focuses on modularity and separation of concerns, where each component manages its own data independently.
+
+Combining both approaches: Children components can also fetch their data in parallel internally, achieving both modularity and performance.
+
+1. Parallel API Calling (centralized):
+
+Multiple API requests are explicitly triggered together in one place (e.g., in a function or server component) using something like Promise.all().
+
+The focus is on fetching all data as fast as possible, usually before rendering.
+
+Example: Fetching todos + 3 slow APIs together in one Promise.all() call.
+
+2. Component-Based Fetching (parent/child):
+
+Each component can fetch its own data independently.
+
+Parallelism is possible but not automatic:
+
+If a parent fetches data for itself and children, it may do so sequentially unless you explicitly trigger parallel fetches.
+
+Each child can also fetch its own data in parallel internally.
+
+The focus is modularity — letting components manage their own data — rather than purely speed.
+
+Key Difference Regarding Parallelism:
+
+Centralized parallel calling is all about speed, fetching everything together in one place.
+
+Component-based fetching is all about structure; parallelism must be implemented intentionally if needed.
