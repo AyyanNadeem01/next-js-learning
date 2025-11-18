@@ -1,0 +1,3 @@
+to do parallel api fetching do all calls in separate files and in parent call all components
+
+to do sequential api fetching call all apis in parent file only
