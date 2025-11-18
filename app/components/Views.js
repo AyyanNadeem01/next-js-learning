@@ -1,7 +1,8 @@
 import React from 'react'
 
-const Views = async() => {
-    await new Promise((resolve)=>setTimeout(resolve,3000)) //simulating delay
+//const Views = async() => {
+  const Views = () => {
+  // await new Promise((resolve)=>setTimeout(resolve,3000)) //simulating delay
   return (
     <div>
       10k Views

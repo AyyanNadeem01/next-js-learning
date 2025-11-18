@@ -1,0 +1,2 @@
+client components execute on client and server both,
+server components execute on server only
