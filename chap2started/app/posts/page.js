@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-const Page = () => {
+const Posts = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -32,4 +32,4 @@ const Page = () => {
 );
 };
 
-export default Page;
+export default Posts;

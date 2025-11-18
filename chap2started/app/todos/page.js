@@ -1,6 +1,9 @@
-const Page = async () => {
+const Todos = async () => {
   //the under code is server code and dont went to client side
-    const response = await fetch(
+  const slowResponse=await fetch("https://procodrr.vercel.app/?sleep=2000")  
+  const data=await slowResponse.json();
+  console.log(data)
+  const response = await fetch(
     "https://jsonplaceholder.typicode.com/todos?_limit=10",{
         next:{revalidate:10,},
     }
@@ -30,4 +33,4 @@ return (
   );
 };
 
-export default Page;
+export default Todos;
