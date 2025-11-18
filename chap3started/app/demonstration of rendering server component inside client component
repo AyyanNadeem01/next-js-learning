@@ -1,0 +1,110 @@
+<ServiceList>
+  {services.map((service) => (
+    <ServiceItem key={service} serviceName={service} />
+  ))}
+</ServiceList>
+This changes HOW rendering works in Next.js.
+Let’s break it down in a clean, simple way.
+
+✅ 1. Your Services Page is a SERVER COMPONENT (default)
+Because it does NOT have "use client".
+
+So page.jsx runs on the server.
+
+✅ 2. ServiceList is a CLIENT COMPONENT
+Because ServiceList.jsx has:
+
+jsx
+Copy code
+"use client";
+This means:
+
+It runs in the browser
+
+It is hydrated on the client
+
+✅ 3. ServiceItem is a SERVER COMPONENT
+Because it does NOT have "use client".
+
+⭐ Key Point:
+When you pass Server Component JSX as children to a Client Component,
+Next.js MUST render the Server Component on the server first.
+
+Exactly like this:
+
+java
+Copy code
+Server Component (ServiceItem) → ran first
+↓ produces HTML
+Client Component (ServiceList) → receives static HTML children
+↓ hydrates in browser
+🔥 This means:
+Even though ServiceList is a client component,
+the children inside it (ServiceItem) MUST be rendered on the server first.
+
+This is the behavior your teacher is talking about.
+
+🧠 WHY this happens?
+Because client components cannot execute server components in the browser.
+
+So Next.js says:
+
+“Since ServiceItem is a Server Component, I will run it first on the server and pass its HTML into ServiceList.”
+
+📌 In short:
+Services.jsx (server)
+renders:
+
+ServiceItem.jsx (server)
+which produces HTML, then passes it to:
+
+ServiceList.jsx (client)
+So you get Server → Client rendering.
+
+🟥 Now the important part
+Your teacher changed the props because passing JSX children forces the Server → Client boundary.
+If instead you passed data, not JSX, the rendering switches.
+
+⭐ If teacher rewrote like this:
+page.jsx
+jsx
+Copy code
+<ServiceList services={services} />
+ServiceList.jsx (client)
+jsx
+Copy code
+"use client";
+
+export default function ServiceList({ services }) {
+  return (
+    <ul>
+      {services.map((s) => (
+        <ServiceItem key={s} serviceName={s} />
+      ))}
+    </ul>
+  );
+}
+Now the rendering becomes:
+
+Client → Server
+Why?
+
+Because the Client Component now tries to render ServiceItem (a Server Component).
+That is not allowed.
+
+Next.js will give an error:
+
+arduino
+Copy code
+Server component cannot be rendered inside a client component
+So teacher’s change forces a different rendering model.
+
+✔ Final Answer (What your teacher meant)
+Passing Server Components as children to a client component forces Next.js to render them on the server first, producing server-rendered HTML inside a client-rendered wrapper.
+
+This is a special case allowed by Next.js.
+
+If your teacher changed props passing, they probably did this:
+
+❌ Client renders Server component → Not allowed
+✔ Server renders Server component, passes HTML to Client → Allowed
