@@ -1,11 +1,12 @@
-import React from 'react'
+"use client";   // required because Suspense fallback is a Client Component
+import React from "react";
 
-const loading = () => {
+const Loading = ({ text }) => {
   return (
-    <div className='flex items-center justify-center h-screen'>
-      Loading Todos...
+    <div className="flex items-center justify-center">
+      Loading {text}...
     </div>
-  )
-}
+  );
+};
 
-export default loading
+export default Loading;
