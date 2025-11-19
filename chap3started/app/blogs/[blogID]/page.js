@@ -9,7 +9,7 @@ const Blog = async ({ params }) => {
   console.log(randomNumber);
   
   if (randomNumber > 0.5) {
-    throw new Error("Error occurred");
+    throw new Error("Error occurred");//this is error which occur sometime, sometime not
   }
 
   return (
