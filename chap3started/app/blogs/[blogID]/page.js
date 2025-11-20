@@ -1,4 +1,4 @@
-import "./blogID.css"
+import styles from "./blogID.module.css"
 //import "./hi.css"
 const Blog = async ({ params }) => {
   const { blogID } = await params;
@@ -18,7 +18,7 @@ const Blog = async ({ params }) => {
     <>
       <div>
         <h1 className="blogId">Welcome to Our Blog {blogID}</h1>
-        <p className="title">This is blog {blogID} page.</p>
+        <p className={styles.title}>This is blog {blogID} page.</p>
       </div>
     </>
   );
