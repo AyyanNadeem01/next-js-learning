@@ -1,0 +1,11 @@
+.blogId {
+    .title{
+        background-color: teal;
+    }
+}
+body{
+    background-color: teal;
+}
+p{
+    color: brown; 
+}

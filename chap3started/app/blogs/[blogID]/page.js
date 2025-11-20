@@ -1,3 +1,5 @@
+import "./blogID.css"
+//import "./hi.css"
 const Blog = async ({ params }) => {
   const { blogID } = await params;
 
@@ -15,8 +17,8 @@ const Blog = async ({ params }) => {
   return (
     <>
       <div>
-        <h1>Welcome to Our Blog {blogID}</h1>
-        <p>This is blog {blogID} page.</p>
+        <h1 className="blogId">Welcome to Our Blog {blogID}</h1>
+        <p className="title">This is blog {blogID} page.</p>
       </div>
     </>
   );
