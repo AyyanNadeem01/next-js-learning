@@ -1,5 +1,7 @@
-
+import "./home.css"
+export const dynamic="force-dynamic";//this will make the page dynamic and will run on every request
 const Home = () => {
+    
   return (
     <>
 
