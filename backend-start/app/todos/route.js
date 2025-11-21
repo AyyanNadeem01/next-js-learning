@@ -10,7 +10,7 @@
 
 // console.log(data);
 import todosData from "../../todos";
-
+import {writeFile} from "node:fs/promises"
 export function GET(request) {
   console.log(request)
   return Response.json(todosData);
@@ -22,4 +22,16 @@ export function GET(request) {
   //     status: 200,
   //     statusText: "ProCodrr",
   //   });
+}
+export async function POST(request) {
+  const todo=await request.json()
+  console.log(todo);
+  const newTodo={
+    id:crypto.randomUUID(),
+    text:todo.text,
+    completed:false,
+  }
+  todosData.push(newTodo)
+  await writeFile("todos.json",JSON.stringify(todosData,null,2))
+  return Response.json(newTodo)
 }
