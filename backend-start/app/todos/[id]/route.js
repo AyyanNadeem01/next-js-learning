@@ -40,3 +40,14 @@ export async function PUT(request, { params }) {
 
   return Response.json(updatedTodo);
 }
+
+export async function DELETE(_,{params}){
+  const {id}=await params
+  const index=todosData.findIndex((todo)=>String(todo.id)===String(id))
+  if(index===-1){
+    return Response.json({error:`Todo with id ${id} not found`},{status:404})
+  }
+  const deletedTodo=todosData.splice(index,1)[0]
+  await writeFile("todos.json",JSON.stringify(todosData,null,2))
+  return Response.json(deletedTodo)
+}

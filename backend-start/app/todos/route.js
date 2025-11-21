@@ -33,5 +33,5 @@ export async function POST(request) {
   }
   todosData.push(newTodo)
   await writeFile("todos.json",JSON.stringify(todosData,null,2))
-  return Response.json(newTodo)
+  return Response.json(newTodo,{status:201})
 }
