@@ -1,4 +1,5 @@
 import todosData from "../../../todos";
+import {writeFile} from "node:fs/promises"
 
 export async function GET(_,{params}) {
   const {id}=await params
@@ -9,4 +10,33 @@ export async function GET(_,{params}) {
   }
   return Response.json(todo);
 
+}
+export async function PUT(request, { params }) {
+  const editTodoData = await request.json();
+  const { id } = await params;
+
+  const index = todosData.findIndex(todo => String(todo.id) === String(id));
+  if(editTodoData.id){
+    return Response.json(
+      { error: "Cannot edit todo id" },
+      { status: 403 }
+    )
+    }
+  if (index === -1) {
+    return Response.json(
+      { error: `Todo with id ${id} not found` },
+      { status: 404 }
+    );
+  }
+
+  const updatedTodo = {
+    ...todosData[index],
+    ...editTodoData
+  };
+
+  todosData[index] = updatedTodo;
+
+  await writeFile("todos.json", JSON.stringify(todosData, null, 2));
+
+  return Response.json(updatedTodo);
 }
