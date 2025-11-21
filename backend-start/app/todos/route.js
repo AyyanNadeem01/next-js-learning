@@ -9,13 +9,17 @@
 // const data = await readFile("hello.txt", "utf-8");
 
 // console.log(data);
+import { readFile } from "node:fs/promises";
 import todosData from "../../todos";
 import {writeFile} from "node:fs/promises"
-export function GET(request) {
+import { todo } from "node:test";
+export async function GET(request) {
   console.log(request)
-  return Response.json(todosData);
+   const todoJSONString=await readFile("todos.json","utf-8")
+   const todos=JSON.parse(todoJSONString)
+   return Response.json(todos);
 
-  //   return new Response(JSON.stringify(todosData), {
+   //   return new Response(JSON.stringify(todosData), {
   //     headers: {
   //       "Content-Type": "application/json",
   //     },

@@ -49,5 +49,5 @@ export async function DELETE(_,{params}){
   }
   const deletedTodo=todosData.splice(index,1)[0]
   await writeFile("todos.json",JSON.stringify(todosData,null,2))
-  return Response.json(deletedTodo)
+ return Response.json(deletedTodo, { status: 200 })
 }
