@@ -11,7 +11,8 @@
 // console.log(data);
 import todosData from "../../todos";
 
-export function GET() {
+export function GET(request) {
+  console.log(request)
   return Response.json(todosData);
 
   //   return new Response(JSON.stringify(todosData), {
