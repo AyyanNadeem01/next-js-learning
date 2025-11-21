@@ -12,8 +12,10 @@
 import { readFile } from "node:fs/promises";
 import todosData from "../../todos";
 import {writeFile} from "node:fs/promises"
-import { todo } from "node:test";
+import {connectDB} from "@/lib/connectDB";
+
 export async function GET(request) {
+  await connectDB()
   console.log(request)
    const todoJSONString=await readFile("todos.json","utf-8")
    const todos=JSON.parse(todoJSONString)
