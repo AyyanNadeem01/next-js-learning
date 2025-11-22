@@ -74,75 +74,70 @@
 // }
 "use client";
 
-import { useState , useEffect} from "react";
+import { useEffect, useState } from "react";
 import TodoList from "@/components/TodoList";
 import TodoForm from "@/components/TodoForm";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
 
-// const todosData = [
-//   { id: 1, text: "Learn Next.js 15", completed: false },
-//   { id: 2, text: "Master Node.js", completed: true },
-//   { id: 3, text: "Learn MongoDB", completed: true },
-// ];
-
 export default function Home() {
   const [todos, setTodos] = useState([]);
   const { theme = "dark", setTheme } = useTheme();
 
-  useEffect(()=>{
-    fetchTodos()
-  },[])
-  const fetchTodos=async()=>{
-    const response=await fetch("/api/todos")
-    const todosData=await response.json()
-    setTodos(todosData)
-  }
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = async () => {
+    const response = await fetch("/api/todos");
+    const todosData = await response.json();
+    setTodos(todosData.reverse());
+  };
 
   // Add new todo
   const addTodo = async (text) => {
-    const response = await fetch("/api/todos",{
-      method:"POST",
-      body:JSON.stringify({text})
-    })
+    const response = await fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify({ text }),
+    });
     const newTodo = await response.json();
     setTodos([newTodo, ...todos]);
   };
 
   // Delete todo
-  const deleteTodo = async(id) => {
-      const response=await fetch(`/api/todos/${id}`,{
-      method:"DELETE",
-    })
-    if(response.status===200){
-      await fetchTodos()
-    }};
+  const deleteTodo = async (id) => {
+    const response = await fetch(`/api/todos/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.status === 204) {
+      fetchTodos();
+    }
+  };
 
   // Toggle todo completion
-  const toggleTodo = async(id) => {
-    
-      const todo=todos.find((todo) =>
-        todo.id === id);
-      const response=await fetch(`/api/todos/${id}`,{
-        method:"PUT",
-        body:JSON.stringify({completed:!todo.completed}),
-      })
-      if(response.status===200){
-        await fetchTodos()
-      }
+  const toggleTodo = async (id) => {
+    const todo = todos.find((todo) => todo.id === id);
+    const response = await fetch(`/api/todos/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ completed: !todo.completed }),
+    });
+
+    if (response.status === 200) {
+      fetchTodos();
+    }
   };
 
   // Update todo text
-  const updateTodo =async (id, newText) => {
-   
-     
-      const response=await fetch(`/api/todos/${id}`,{
-        method:"PUT",
-        body:JSON.stringify({text:newText}),
-      })
-      if(response.status===200){
-        await fetchTodos()
-      }
+  const updateTodo = async (id, newText) => {
+    const response = await fetch(`/api/todos/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ text: newText }),
+    });
+
+    if (response.status === 200) {
+      fetchTodos();
+    }
   };
 
   return (
