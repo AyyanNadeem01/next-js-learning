@@ -79,8 +79,10 @@ import TodoList from "@/components/TodoList";
 import TodoForm from "@/components/TodoForm";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [todos, setTodos] = useState([]);
   const { theme = "dark", setTheme } = useTheme();
 
@@ -90,8 +92,13 @@ export default function Home() {
 
   const fetchTodos = async () => {
     const response = await fetch("/api/todos");
-    const todosData = await response.json();
-    setTodos(todosData.reverse());
+    const data = await response.json();
+    if (response.status === 401) {
+      return router.push("/login");
+    }
+    if (!data.error) {
+      setTodos(data.reverse());
+    }
   };
 
   // Add new todo
