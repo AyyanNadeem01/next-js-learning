@@ -1,3 +1,5 @@
+
+
 // import Image from "next/image";
 // import http from "http";
 
@@ -72,8 +74,7 @@
 //     </div>
 //   );
 // }
-"use client";
-
+"use client"
 import { useEffect, useState } from "react";
 import TodoList from "@/components/TodoList";
 import TodoForm from "@/components/TodoForm";
@@ -84,9 +85,11 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const router = useRouter();
   const [todos, setTodos] = useState([]);
+  const [mounted, setMounted] = useState(false);
   const { theme = "dark", setTheme } = useTheme();
 
   useEffect(() => {
+    setMounted(true);
     fetchTodos();
   }, []);
 
@@ -154,17 +157,19 @@ export default function Home() {
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">
             Todo App
           </h1>
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? (
-              <SunIcon className="h-5 w-5" />
-            ) : (
-              <MoonIcon className="h-5 w-5" />
-            )}
-          </button>
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-full hover:bg-muted transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <SunIcon className="h-5 w-5" />
+              ) : (
+                <MoonIcon className="h-5 w-5" />
+              )}
+            </button>
+          )}
         </header>
 
         <TodoForm addTodo={addTodo} />
