@@ -1,5 +1,7 @@
+import { signCookie } from "@/lib/auth";
 import { connectDB } from "@/lib/connectDB";
 import User from "@/models/userModel";
+import { createHmac } from "crypto";
 import { cookies } from "next/headers";
 
 export async function POST(request) {
@@ -18,7 +20,7 @@ export async function POST(request) {
       );
     }
 
-    cookieStore.set("userId", user.id, {
+    cookieStore.set("userId", signCookie(user.id), {
       httpOnly: true,
       maxAge: 60 * 60 * 24,
     });

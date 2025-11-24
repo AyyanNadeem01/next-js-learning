@@ -1,4 +1,5 @@
 import User from "@/models/userModel";
+import { createHmac } from "crypto";
 import { cookies } from "next/headers";
 
 export async function getLoggedInUser() {
@@ -9,10 +10,18 @@ export async function getLoggedInUser() {
       status: 401,
     }
   );
-  const userId = cookieStore.get("userId")?.value;
+  const cookie = cookieStore.get("userId")?.value;
+
+  if (!cookie) {
+    return errorResponse;
+  }
+
+  const userId = verifyCookie(cookie);
+
   if (!userId) {
     return errorResponse;
   }
+
   const user = await User.findById(userId);
 
   if (!user) {
@@ -20,4 +29,23 @@ export async function getLoggedInUser() {
   }
 
   return user;
+}
+
+export function signCookie(cookie) {
+  const signature = createHmac("sha256", process.env.COOKIE_SECRET)
+    .update(cookie)
+    .digest("hex");
+
+  return `${cookie}.${signature}`;
+}
+
+export function verifyCookie(signedCookie) {
+  const [cookie, cookieSignature] = signedCookie.split(".");
+  const signature = signCookie(cookie).split(".")[1];
+
+  if (signature === cookieSignature) {
+    return cookie;
+  }
+
+  return false;
 }
