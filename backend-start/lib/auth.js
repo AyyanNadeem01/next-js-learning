@@ -1,3 +1,4 @@
+import Session from "@/models/sessionModel";
 import User from "@/models/userModel";
 import { createHmac } from "crypto";
 import { cookies } from "next/headers";
@@ -16,18 +17,22 @@ export async function getLoggedInUser() {
     return errorResponse;
   }
 
-  const userId = verifyCookie(cookie);
+  const sessionId = verifyCookie(cookie);
 
-  if (!userId) {
+  if (!sessionId) {
     return errorResponse;
   }
 
-  const user = await User.findById(userId);
+  const session = await Session.findById(sessionId);
 
+  if (!session) {
+    return errorResponse;
+  }
+
+  const user = await User.findById(session.userId);
   if (!user) {
     return errorResponse;
   }
-
   return user;
 }
 
