@@ -36,6 +36,12 @@ export async function getLoggedInUser() {
   return user;
 }
 
+export async function getUserSessionId() {
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get("userId")?.value;
+  return verifyCookie(cookie);
+}
+
 export function signCookie(cookie) {
   const signature = createHmac("sha256", process.env.COOKIE_SECRET)
     .update(cookie)
