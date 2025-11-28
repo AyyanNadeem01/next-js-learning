@@ -1,19 +1,20 @@
 "use client";
 
+import { z } from "zod/v4";
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { registerUser } from "../actions/userAction";
 import { registerSchema } from "@/lib/schema/userSchema";
-import { z } from "zod/v4";
+
 
 export default function RegisterPage() {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(registerUser, {});
 
-  const [name, setName] = useState("ProCodrr");
-  const [email, setEmail] = useState("procodrr@gmail.com");
-  const [password, setPassword] = useState("1234ABcd");
+  const [name, setName] = useState("_");
+  const [email, setEmail] = useState("_@gmail.com");
+  const [password, setPassword] = useState("_");
 
   const [errors, setErrors] = useState({});
 
@@ -25,14 +26,12 @@ export default function RegisterPage() {
     }
   }, [state]);
 
-  const handleFormAction = async (formData) => {
-    const newUser = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
-
-    const { success, data, error } = registerSchema.safeParse(newUser);
+  const handleFormAction = async () => {
+    const { success, data, error } = registerSchema.safeParse({
+      name,
+      email,
+      password,
+    });
 
     if (!success) {
       return setErrors(z.flattenError(error).fieldErrors);
