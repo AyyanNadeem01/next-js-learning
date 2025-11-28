@@ -13,13 +13,17 @@ export default function RegisterPage() {
 
   const [name, setName] = useState("ProCodrr");
   const [email, setEmail] = useState("procodrr@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [password, setPassword] = useState("1234ABcd");
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setErrors(state.errors);
-  }, [state.errors]);
+    if (state.success) {
+      router.push("/login");
+    } else {
+      setErrors(state.errors);
+    }
+  }, [state]);
 
   const handleFormAction = async (formData) => {
     const newUser = {
