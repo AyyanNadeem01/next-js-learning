@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { registerUser } from "../actions/userAction";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [state, formAction, isPending] = useActionState(registerUser, {});
+
   const [name, setName] = useState("_");
   const [email, setEmail] = useState("_@gmail.com");
   const [password, setPassword] = useState("_");
@@ -20,7 +22,7 @@ export default function RegisterPage() {
           </h1>
         </header>
         <h2 className="text-2xl font-semibold mb-4">Register</h2>
-        <form action={registerUser} className="space-y-4">
+        <form action={formAction} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Name
@@ -60,9 +62,13 @@ export default function RegisterPage() {
               required
             />
           </div>
+          <p className="text-xs text-green-500">{state.message}</p>
+          <p className="text-xs text-red-500">{state.error}</p>
+
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 rounded-md font-medium hover:opacity-90"
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 rounded-md font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isPending}
           >
             Register
           </button>
