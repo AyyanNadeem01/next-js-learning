@@ -6,7 +6,7 @@ import { loginSchema, registerSchema } from "@/lib/schema/userSchema";
 import { connectDB } from "@/lib/connectDB";
 import User from "@/models/userModel";
 import Session from "@/models/sessionModel";
-import { signCookie } from "@/lib/auth";
+import { getUserSessionId, signCookie } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 export async function registerUser(_, formData) {
@@ -89,4 +89,12 @@ export async function loginUser(_, formData) {
       },
     };
   }
+}
+
+export async function logoutUser() {
+  const cookieStore = await cookies();
+  const sessionId = await getUserSessionId();
+  await Session.findByIdAndDelete(sessionId);
+  cookieStore.delete("userId");
+  return { success: true };
 }

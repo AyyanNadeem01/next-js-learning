@@ -82,6 +82,7 @@ import TodoForm from "@/components/TodoForm";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { logoutUser } from "./actions/userAction";
 
 export default function Home() {
   const router = useRouter();
@@ -173,10 +174,8 @@ export default function Home() {
   };
 
   const handleLogout = async () => {
-    const response = await fetch(`/api/logout`, {
-      method: "POST",
-    });
-    if (response.status === 204) {
+    const response = await logoutUser({ name: "anurag" });
+    if (response.success) {
       return router.push("/login");
     }
   };
@@ -186,7 +185,7 @@ export default function Home() {
       <div className="w-full max-w-lg">
         <header className="mb-8 flex justify-between items-center relative">
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">
-            Todo App
+            My Todo App
           </h1>
           <div className="flex items-center gap-2">
             <button
