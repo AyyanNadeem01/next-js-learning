@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { registerUser } from "../actions/userAction";
+import { registerSchema } from "@/lib/schema/userSchema";
+import { z } from "zod/v4";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,6 +17,10 @@ export default function RegisterPage() {
 
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    setErrors(state.errors);
+  }, [state.errors]);
+
   const handleFormAction = async (formData) => {
     const newUser = {
       name: formData.get("name"),
@@ -22,28 +28,14 @@ export default function RegisterPage() {
       password: formData.get("password"),
     };
 
-    const formErrors = {};
+    const { success, data, error } = registerSchema.safeParse(newUser);
 
-    if (newUser.name.length < 3) {
-      formErrors.name = "name should be at least 3 characters";
-    }
-
-    if (!newUser.email.includes("@")) {
-      formErrors.email = "please enter a valid email";
-    }
-
-    if (newUser.password.length < 8) {
-      formErrors.password = "password should be at least 8 characters";
-    }
-
-    if (Object.keys(formErrors).length) {
-      console.log(formErrors);
-      return setErrors(formErrors);
+    if (!success) {
+      return setErrors(z.flattenError(error).fieldErrors);
     }
 
     setErrors({});
-
-    formAction(newUser);
+    return formAction(data);
   };
 
   return (
@@ -63,12 +55,12 @@ export default function RegisterPage() {
             <input
               type="text"
               className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
-              value={name}
               name="name"
+              value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
-            <p className="text-xs text-red-500 -mb-2">{errors.name}</p>
+            <p className="text-xs text-red-500 -mb-2">{errors?.name}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -77,12 +69,12 @@ export default function RegisterPage() {
             <input
               type="email"
               name="email"
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
               required
             />
-            <p className="text-xs text-red-500 -mb-2">{errors.email}</p>
+            <p className="text-xs text-red-500 -mb-2">{errors?.email}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -91,16 +83,13 @@ export default function RegisterPage() {
             <input
               type="password"
               name="password"
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
               required
             />
-            <p className="text-xs text-red-500 -mb-2">{errors.password}</p>
+            <p className="text-xs text-red-500 -mb-2">{errors?.password}</p>
           </div>
-          <p className="text-xs text-green-500">{state.message}</p>
-          <p className="text-xs text-red-500">{state.error}</p>
-
           <button
             type="submit"
             className="w-full bg-gradient-to-r mt-2 from-blue-500 to-purple-600 text-white py-2 rounded-md font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
