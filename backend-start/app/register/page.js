@@ -9,9 +9,42 @@ export default function RegisterPage() {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(registerUser, {});
 
-  const [name, setName] = useState("_");
-  const [email, setEmail] = useState("_@gmail.com");
-  const [password, setPassword] = useState("_");
+  const [name, setName] = useState("ProCodrr");
+  const [email, setEmail] = useState("procodrr@gmail.com");
+  const [password, setPassword] = useState("123456");
+
+  const [errors, setErrors] = useState({});
+
+  const handleFormAction = async (formData) => {
+    const newUser = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
+    const formErrors = {};
+
+    if (newUser.name.length < 3) {
+      formErrors.name = "name should be at least 3 characters";
+    }
+
+    if (!newUser.email.includes("@")) {
+      formErrors.email = "please enter a valid email";
+    }
+
+    if (newUser.password.length < 8) {
+      formErrors.password = "password should be at least 8 characters";
+    }
+
+    if (Object.keys(formErrors).length) {
+      console.log(formErrors);
+      return setErrors(formErrors);
+    }
+
+    setErrors({});
+
+    formAction(newUser);
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center py-8 px-4 sm:px-6">
@@ -22,7 +55,7 @@ export default function RegisterPage() {
           </h1>
         </header>
         <h2 className="text-2xl font-semibold mb-4">Register</h2>
-        <form action={formAction} className="space-y-4">
+        <form action={handleFormAction} className="space-y-4" noValidate>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Name
@@ -35,6 +68,7 @@ export default function RegisterPage() {
               onChange={(e) => setName(e.target.value)}
               required
             />
+            <p className="text-xs text-red-500 -mb-2">{errors.name}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -48,6 +82,7 @@ export default function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <p className="text-xs text-red-500 -mb-2">{errors.email}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -61,13 +96,14 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <p className="text-xs text-red-500 -mb-2">{errors.password}</p>
           </div>
           <p className="text-xs text-green-500">{state.message}</p>
           <p className="text-xs text-red-500">{state.error}</p>
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 rounded-md font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r mt-2 from-blue-500 to-purple-600 text-white py-2 rounded-md font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isPending}
           >
             Register
