@@ -1,15 +1,15 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { registerUser } from "../actions/userAction";
 
 export default function RegisterPage() {
-  async function registerUser(formData) {
-    "use server";
-    console.log(formData.get("name"));
-    console.log(formData.get("email"));
-    console.log(formData.get("password"));
-    return { message: "Got the data" };
-  }
+  const router = useRouter();
+  const [name, setName] = useState("_");
+  const [email, setEmail] = useState("_@gmail.com");
+  const [password, setPassword] = useState("_");
 
   return (
     <div className="min-h-screen flex flex-col items-center py-8 px-4 sm:px-6">
@@ -20,17 +20,17 @@ export default function RegisterPage() {
           </h1>
         </header>
         <h2 className="text-2xl font-semibold mb-4">Register</h2>
-        <form className="space-y-4">
+        <form action={registerUser} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Name
             </label>
             <input
               type="text"
-              name="name"
               className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
-              value="ProCodrr"
-              readOnly
+              value={name}
+              name="name"
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
@@ -42,8 +42,8 @@ export default function RegisterPage() {
               type="email"
               name="email"
               className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
-              value="procodrr@gmail.com"
-              readOnly
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -55,14 +55,13 @@ export default function RegisterPage() {
               type="password"
               name="password"
               className="mt-1 w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-900 dark:text-white"
-              value="abcd"
-              readOnly
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
           <button
             type="submit"
-            formAction={registerUser}
             className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 rounded-md font-medium hover:opacity-90"
           >
             Register
