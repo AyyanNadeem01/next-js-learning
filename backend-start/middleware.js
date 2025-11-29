@@ -1,3 +1,4 @@
+//next js support only one middleware function per project
 export const middleware = (request) => {
   if (request.cookies.get("userId")) {
     if (
