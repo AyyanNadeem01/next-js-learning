@@ -535,4 +535,239 @@ Always start with `next/core-web-vitals`:
 TypeScript + ESLint provides better type checking:
 ```json
 {
-  "extends": ["next/core-web-
+  "extends": ["next/core-web-vitals", "next/typescript"]
+}
+```
+
+### 3. Integrate with Pre-commit Hooks (Husky)
+
+Husky enables Git hooks to run scripts before commits, ensuring code quality before it reaches your repository.
+
+#### Installation
+
+```bash
+# Install Husky and lint-staged
+npm install --save-dev husky lint-staged
+
+# Initialize Husky
+npx husky install
+
+# Add prepare script (runs after npm install)
+npm pkg set scripts.prepare="husky install"
+
+# Create pre-commit hook
+npx husky add .husky/pre-commit "npx lint-staged"
+```
+
+#### Configure lint-staged
+
+Add to `package.json`:
+```json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml}": [
+      "prettier --write"
+    ]
+  }
+}
+```
+
+#### Complete package.json Example
+
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.0.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
+```
+
+#### Additional Git Hooks
+
+**Pre-push hook** (run tests before push):
+```bash
+npx husky add .husky/pre-push "npm test"
+```
+
+**Commit-msg hook** (enforce commit message format):
+```bash
+npx husky add .husky/commit-msg 'npx --no -- commitlint --edit ${1}'
+```
+
+#### Benefits of Using Husky
+
+- **Automatic code quality checks** - No manual linting needed
+- **Prevents bad commits** - Catches errors before they're committed
+- **Team consistency** - Everyone follows the same rules
+- **Faster CI/CD** - Fewer failed builds
+- **Better code reviews** - Pre-formatted, clean code
+
+### 4. Configure Editor Integration
+
+**VS Code** (`.vscode/settings.json`):
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}
+```
+
+### 5. Document Your Rules
+
+Add comments to explain custom rules:
+```json
+{
+  "rules": {
+    // Allow console.warn and console.error for debugging
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    
+    // Disabled because Next.js handles React import automatically
+    "react/react-in-jsx-scope": "off"
+  }
+}
+```
+
+### 6. Regular Updates
+
+Keep ESLint and related packages updated:
+```bash
+npm update eslint eslint-config-next
+```
+
+### 7. Team Consistency
+
+Commit your ESLint configuration to version control:
+- `.eslintrc.json`
+- `.eslintignore`
+- `.vscode/settings.json` (optional)
+
+---
+
+## Next.js-Specific Rules
+
+### Core Rules (included in next)
+
+| Rule | Description |
+|------|-------------|
+| `@next/next/no-html-link-for-pages` | Prevent usage of `<a>` for internal links |
+| `@next/next/no-img-element` | Prevent usage of `<img>` element |
+| `@next/next/no-sync-scripts` | Prevent synchronous scripts |
+| `@next/next/no-page-custom-font` | Prevent page-only custom fonts |
+
+### Core Web Vitals Rules (in core-web-vitals)
+
+| Rule | Description |
+|------|-------------|
+| `@next/next/no-css-tags` | Prevent manual stylesheet tags |
+| `@next/next/no-document-import-in-page` | Prevent Document imports outside _document |
+| `@next/next/no-head-import-in-document` | Prevent Head import in _document |
+| `@next/next/google-font-display` | Enforce font-display with Google Fonts |
+
+---
+
+## Example: Complete Next.js Project Setup
+
+### File Structure
+```
+my-nextjs-app/
+├── .eslintrc.json
+├── .eslintignore
+├── .prettierrc
+├── .vscode/
+│   └── settings.json
+├── next.config.js
+├── package.json
+└── src/
+    ├── pages/
+    ├── components/
+    └── styles/
+```
+
+### .eslintrc.json
+```json
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier"
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_"
+    }],
+    "@next/next/no-img-element": "error",
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
+  }
+}
+```
+
+### package.json
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.3.0"
+  }
+}
+```
+
+---
+
+## Resources
+
+- [Next.js ESLint Documentation](https://nextjs.org/docs/pages/building-your-application/configuring/eslint)
+- [eslint-config-next GitHub](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next)
+- [ESLint Official Docs](https://eslint.org/docs/latest/)
+- [Next.js Examples](https://github.com/vercel/next.js/tree/canary/examples)
+
+---
+
+## Conclusion
+
+ESLint in Next.js provides a powerful, integrated development experience that catches errors early and enforces best practices. Start with the recommended `next/core-web-vitals` configuration and customize as needed for your team's requirements. The built-in support makes it easy to maintain code quality without complex setup.
